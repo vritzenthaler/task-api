@@ -42,10 +42,10 @@ def client(tmp_path, monkeypatch):
 
 @pytest.fixture
 def auth_headers_alice(client):
-    register_response = client.post("/users/register", json={"username": "alice", "password": "password123"})
+    register_response = client.post("/users/register", json={"username": "alice", "password": "Il0v3y0u*"})
     assert register_response.status_code == 201, register_response.text
 
-    login_response = client.post("/users/login", json={"username": "alice", "password": "password123"})
+    login_response = client.post("/users/login", json={"username": "alice", "password": "Il0v3y0u*"})
     assert login_response.status_code == 200, login_response.text
 
     token = login_response.json()["access_token"]
@@ -55,10 +55,10 @@ def auth_headers_alice(client):
 
 @pytest.fixture
 def auth_headers_bob(client):
-    register_response = client.post("/users/register", json={"username": "bob", "password": "password123"})
+    register_response = client.post("/users/register", json={"username": "bob", "password": "Il0v3y0u*"})
     assert register_response.status_code == 201, register_response.text
 
-    login_response = client.post("/users/login", json={"username": "bob", "password": "password123"})
+    login_response = client.post("/users/login", json={"username": "bob", "password": "Il0v3y0u*"})
     assert login_response.status_code == 200, login_response.text
 
     token = login_response.json()["access_token"]

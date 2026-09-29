@@ -167,7 +167,8 @@ def patch_task(task_id: int, data: TaskUpdate, token: Annotated[HTTPAuthorizatio
             )
 
         connection.commit()
-        return task.model_copy(update=changes)
+        
+    return task.model_copy(update=changes)
 
 
 @app.get("/tasks/{task_id}", response_model=Task)
