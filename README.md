@@ -1,10 +1,10 @@
 # Task API
 
-API de gestion de tâches avec FastAPI, SQLite, bcrypt et authentification JWT RS256. Chaque utilisateur accède uniquement à ses propres tâches.
+Task management API built with FastAPI, SQLite, bcrypt, and RS256 JWT authentication. Each user can access only their own tasks.
 
 ## Installation
 
-Python 3.10 minimum (développement avec Python 3.12) et `uv`. Depuis la racine du projet :
+Python 3.10 or later (developed with Python 3.12) and `uv` are required. From the project root:
 
 ```bash
 uv sync --extra dev --locked
@@ -12,27 +12,27 @@ uv run python scripts/setup_local.py
 uv run uvicorn app.main:app --reload
 ```
 
-Le script crée une nouvelle paire de clés RSA dans `.keys/` et une phrase secrète aléatoire dans `.env`. Il refuse de remplacer une configuration existante. `.env.example` décrit la variable utilisée. Aucun compte, aucune clé et aucune base de données ne sont livrés avec le projet.
+The script creates a new RSA key pair in `.keys/` and a random secret in `.env`. It will not overwrite an existing configuration. `.env.example` documents the variable used. No accounts, keys, or database are included with the project.
 
-SQLite crée `app_database.db` au démarrage. Documentation interactive : http://127.0.0.1:8000/docs.
+SQLite creates `app_database.db` at startup. Interactive documentation: http://127.0.0.1:8000/docs.
 
-## Utilisation
+## Usage
 
-1. Créer un compte avec `POST /users/register`, par exemple `{"username": "alice", "password": "your-password"}`.
-2. Se connecter avec `POST /users/login` et les mêmes identifiants.
-3. Fournir `access_token` dans `Authorization: Bearer <token>`. Dans `/docs`, utiliser **Authorize**.
+1. Create an account with `POST /users/register`, for example `{"username": "alice", "password": "your-password"}`.
+2. Log in with `POST /users/login` using the same credentials.
+3. Provide `access_token` in `Authorization: Bearer <token>`. In `/docs`, click **Authorize**.
 
-Les jetons expirent après 15 minutes. Les noms d'utilisateur et les titres acceptent de 1 à 16 lettres ASCII, sans espace ni chiffre.
+Tokens expire after 15 minutes. Usernames and task titles must contain 1 to 16 ASCII letters, with no spaces or digits.
 
-| Méthode | Route | Fonction |
+| Method | Route | Description |
 | --- | --- | --- |
-| POST | `/users/register` | Inscription |
-| POST | `/users/login` | Connexion |
-| GET | `/tasks` | Liste des tâches |
-| POST | `/tasks` | Création avec `{"title": "Example"}` |
-| GET | `/tasks/{task_id}` | Consultation |
-| PATCH | `/tasks/{task_id}` | Modification de `title` et/ou `done` |
-| DELETE | `/tasks/{task_id}` | Suppression |
+| POST | `/users/register` | Register |
+| POST | `/users/login` | Log in |
+| GET | `/tasks` | List tasks |
+| POST | `/tasks` | Create a task with `{"title": "Example"}` |
+| GET | `/tasks/{task_id}` | Retrieve a task |
+| PATCH | `/tasks/{task_id}` | Update `title` and/or `done` |
+| DELETE | `/tasks/{task_id}` | Delete a task |
 
 ## Tests
 
@@ -42,19 +42,19 @@ uv run --extra dev pytest
 
 Les tests génèrent une base SQLite et des clés JWT temporaires. Ils fonctionnent sans `.env` ni configuration locale préalable.
 
-## Dépendances
+## Dependencies
 
-`pyproject.toml` déclare les dépendances ; `uv.lock` verrouille leurs versions. Après une modification, lancer `uv lock`. Aucun `requirements.txt` séparé n'est maintenu.
+Dependencies are declared in `pyproject.toml`; `uv.lock` pins their versions. After changing dependencies, run `uv lock`. No separate `requirements.txt` is maintained.
 
-## Nouveau dépôt
+## New repository
 
-Git est initialisé sur `main`, sans historique importé et sans remote. Après création d'un dépôt distant vide :
+Git is initialized on `main`, with no imported history or remote. After creating an empty remote repository:
 
 ```bash
 git add .
 git commit -m "Initial Task API extraction"
-git remote add origin <URL_DU_DEPOT>
+git remote add origin <REPOSITORY_URL>
 git push -u origin main
 ```
 
-Les secrets, clés, bases locales, environnements virtuels et caches sont exclus par `.gitignore`.
+Secrets, keys, local databases, virtual environments, and caches are excluded by `.gitignore`.
