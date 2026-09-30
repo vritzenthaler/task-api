@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 from app.database import init_db, DB_PATH, get_connection
 from app.users import router
 from app import config
-from jwt.exceptions import InvalidTokenError
+from jwt.exceptions import InvalidTokenError, ExpiredSignatureError
 from cryptography.hazmat.primitives import serialization
 import jwt
 from typing import Annotated
@@ -41,6 +41,11 @@ def auth_check(token: Annotated[HTTPAuthorizationCredentials, Depends(security)]
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
+    expired_credentials_exception = HTTPException(
+        status_code=401,
+        detail="Expired Token",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
     try:
         with open(config.PUBLIC_KEY_PATH, 'r') as f:
             public_key_pem = f.read()
@@ -50,6 +55,8 @@ def auth_check(token: Annotated[HTTPAuthorizationCredentials, Depends(security)]
 
         if user_id is None:
             raise credentials_exception
+    except ExpiredSignatureError:
+        raise expired_credentials_exception
     except InvalidTokenError:
         raise credentials_exception
 
@@ -167,7 +174,7 @@ def patch_task(task_id: int, data: TaskUpdate, token: Annotated[HTTPAuthorizatio
             )
 
         connection.commit()
-        
+
     return task.model_copy(update=changes)
 
 

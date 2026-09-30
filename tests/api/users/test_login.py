@@ -25,3 +25,6 @@ def test_login_too_long_password(client,auth_headers_alice):
 def test_login_too_long_username(client):
     login_response = client.post("/users/login", json={"username": "alicealicealicealicealicealicealicealice", "password": "Il0v3y0u*"})
     assert login_response.status_code == 422 
+
+
+
